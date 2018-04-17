@@ -25,13 +25,29 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.json
   def create
-    #complete this method
+    	user = User.create(user_params)
+	if user.valid? 
+		flash[:notice] = "Creation Complete"
+		redirect_to root_path
+	else
+		flash[:notice] = user.errors.messages
+		redirect_to "/sign_in"		
+	end
   end
 
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
-    #complete this method
+    	user = User.find_by_email(user_params[:email])
+	user.assign_attributes(user_params)
+	if user.valid? 
+		user.save
+		flash[:notice] = "Edition Complete"
+		redirect_to root_path
+	else
+		flash[:notice] = user.errors.messages
+		redirect_to "/sign_in"		
+	end
   end
 
   # DELETE /users/1
